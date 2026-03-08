@@ -1,0 +1,31 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.env
+VITE_SUPABASE_URL=https://rprtzkowfnpcvowswhhb.supabase.co
+VITE_SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwcnR6a293Zm5wY3Zvd3N3aGhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDAzMDgsImV4cCI6MjA4ODUxNjMwOH0.V58U3Mva5Sp4uwi5D0DMm9AC_9JnbDquS0YJy7QRrdo

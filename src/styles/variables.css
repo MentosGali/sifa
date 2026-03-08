@@ -1,0 +1,14 @@
+:root {
+  --font-main: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  --bg: #f3f6fb;
+  --surface: #ffffff;
+  --text: #16223a;
+  --muted: #4a5a75;
+  --primary: #0b7285;
+  --primary-hover: #0e859c;
+  --border: #dce5f1;
+
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
