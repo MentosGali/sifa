@@ -20,6 +20,26 @@ export function renderLoginScreen() {
     `,
 
     onMount(root) {
+      
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  root.querySelector("#login-error").style.display = "none";
+
+  const username = root.querySelector("#username").value.trim();
+  const password = root.querySelector("#password").value;
+
+  console.log("usuario ingresado:", username);
+
+  const { data: usuario, error: errorUsuario } = await supabase
+    .from("usuarios")
+    .select("*")
+    .eq("username", username)
+    .single();
+
+  console.log("data:", usuario);
+  console.log("error:", errorUsuario);
+
       const form = root.querySelector("#login-form");
 
       form.addEventListener("submit", async (e) => {
