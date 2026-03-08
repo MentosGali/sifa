@@ -20,26 +20,6 @@ export function renderLoginScreen() {
     `,
 
     onMount(root) {
-      
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  root.querySelector("#login-error").style.display = "none";
-
-  const username = root.querySelector("#username").value.trim();
-  const password = root.querySelector("#password").value;
-
-  console.log("usuario ingresado:", username);
-
-  const { data: usuario, error: errorUsuario } = await supabase
-    .from("usuarios")
-    .select("*")
-    .eq("username", username)
-    .single();
-
-  console.log("data:", usuario);
-  console.log("error:", errorUsuario);
-
       const form = root.querySelector("#login-form");
 
       form.addEventListener("submit", async (e) => {
@@ -49,14 +29,14 @@ form.addEventListener("submit", async (e) => {
         const username = root.querySelector("#username").value.trim();
         const password = root.querySelector("#password").value;
 
-        // primero busca en usuarios (encargados/tesorero)
-        const { data: usuario } = await supabase
+        // busca en usuarios
+        const { data: usuario, error: errorUsuario } = await supabase
           .from("usuarios")
           .select("*")
           .eq("username", username)
           .single();
 
-        if (usuario) {
+        if (usuario && !errorUsuario) {
           const coincide = await bcrypt.compare(password, usuario.password);
           if (!coincide) {
             root.querySelector("#login-error").style.display = "block";
@@ -70,14 +50,14 @@ form.addEventListener("submit", async (e) => {
           return;
         }
 
-        // si no es encargado busca en colonos por teléfono
-        const { data: colono } = await supabase
+        // busca en colonos por teléfono
+        const { data: colono, error: errorColono } = await supabase
           .from("colonos")
           .select("*")
           .eq("telefono", username)
           .single();
 
-        if (!colono || !colono.password) {
+        if (!colono || errorColono || !colono.password) {
           root.querySelector("#login-error").style.display = "block";
           return;
         }
