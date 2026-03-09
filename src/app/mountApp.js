@@ -3,6 +3,7 @@ import { renderUserScreen } from "../screens/UserScreen.js";
 import { renderHomeScreen } from "../screens/homeScreen.js";
 import { renderLoginScreen } from "../screens/loginScreen.js";
 import { renderAdminCrud } from "../screens/adminCrud.js";
+import { renderAdminAsistencia } from "../screens/adminList.js";
 import { supabase } from "../config/supabase.js";
 const { data, error } = await supabase.from("colonos").select("*");
 console.log("conexion:", data, error);
@@ -43,6 +44,13 @@ export function mountApp(rootElement) {
       "/": renderHomeScreen,
       "/login": renderLoginScreen,
       "/user": renderUserScreen,
+      "/admin/asistencia": () => {
+        if (!estaAutenticado()) {
+          window.location.hash = "/login";
+          return { html: "" };
+        }
+        return renderAdminAsistencia();
+      },
       "/admin": () => {
         if (!estaAutenticado()) {
           window.location.hash = "/login";

@@ -1,4 +1,5 @@
 import { supabase } from "../config/supabase.js";
+import { renderAdminAsistencia } from "../screens/adminList.js";
 import bcrypt from "bcryptjs";
 
 export function renderAdminCrud() {
@@ -8,100 +9,89 @@ export function renderAdminCrud() {
         <p class="eyebrow">CRUD Administrador</p>
         <h2>Gestión de Faenas Comunitarias</h2>
 
-        <!-- MENU -->
         <label><legend>Sección</legend></label>
         <select class="input" id="menu-admin">
           <option value="">Selecciona una sección</option>
           <option value="faenas">Faenas</option>
           <option value="colonos">Colonos</option>
+          <option value="asistencia">Asistencia</option>
         </select>
 
-       <!-- SECCIÓN FAENAS -->
-<section id="seccion-faenas" style="display:none;">
-  
-  <label>Opciones</label>
-  <select class="input" id="opciones-faenas">
-    <option value="">Selecciona una opción</option>
-    <option value="crear">Crear Faena</option>
-    <option value="gestionar">Ver y Gestionar Faenas</option>
-  </select>
+        <section id="seccion-asistencia" style="display:none;"></section>
 
-  <!-- CREAR FAENA -->
-  <div id="crear-faena" style="display:none;">
-    <h3>Crear Nueva Faena</h3>
-    <form id="create-faena-form" class="stack">
-      <label>Nombre de la Faena
-        <input class="input" name="faena-name" placeholder="Nombre de la faena" required />
-      </label>
-      <label>Fecha de la Faena
-        <input class="input" name="faena-date" type="date" required />
-      </label>
-      <label>Tipo de Faena
-        <select class="input" name="tipo-faena" id="tipo-faena" required>
-          <option value="">Selecciona un tipo</option>
-          <option value="general">General</option>
-          <option value="agua">Agua</option>
-        </select>
-      </label>
-      <label id="cuadrilla-check-container" style="display:none;">
-        Es Cuadrilla
-        <input type="checkbox" id="es-cuadrilla">
-      </label>
-      <div id="cuadrilla-container" style="display:none;">
-        <label>Cuadrilla
-          <select class="input" name="faena-cuadrilla" id="faena-cuadrilla" multiple></select>
-        </label>
-      </div>
-      <p id="faena-error" style="color:red;display:none;">Error al crear la faena.</p>
-      <p id="faena-success" style="color:green;display:none;">Faena creada correctamente.</p>
-      <button type="submit">Crear Faena</button>
-    </form>
-  </div>
+        <section id="seccion-faenas" style="display:none;">
+          <label>Opciones</label>
+          <select class="input" id="opciones-faenas">
+            <option value="">Selecciona una opción</option>
+            <option value="crear">Crear Faena</option>
+            <option value="gestionar">Ver y Gestionar Faenas</option>
+          </select>
 
-  <!-- GESTIONAR FAENAS -->
-  <div id="gestionar-faenas" style="display:none;">
-    <h3>Faenas</h3>
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button id="filtro-todas" class="btn-filtro activo">Todas</button>
-      <button id="filtro-activas" class="btn-filtro">Activas</button>
-      <button id="filtro-cerradas" class="btn-filtro">Cerradas</button>
-    </div>
-    <div id="lista-faenas"></div>
+          <div id="crear-faena" style="display:none;">
+            <h3>Crear Nueva Faena</h3>
+            <form id="create-faena-form" class="stack">
+              <label>Nombre de la Faena
+                <input class="input" name="faena-name" placeholder="Nombre de la faena" required />
+              </label>
+              <label>Fecha de la Faena
+                <input class="input" name="faena-date" type="date" required />
+              </label>
+              <label>Tipo de Faena
+                <select class="input" name="tipo-faena" id="tipo-faena" required>
+                  <option value="">Selecciona un tipo</option>
+                  <option value="general">General</option>
+                  <option value="agua">Agua</option>
+                </select>
+              </label>
+              <label id="cuadrilla-check-container" style="display:none;">
+                Es Cuadrilla
+                <input type="checkbox" id="es-cuadrilla">
+              </label>
+              <div id="cuadrilla-container" style="display:none;">
+                <label>Cuadrilla
+                  <select class="input" name="faena-cuadrilla" id="faena-cuadrilla" multiple></select>
+                </label>
+              </div>
+              <p id="faena-error" style="color:red;display:none;">Error al crear la faena.</p>
+              <p id="faena-success" style="color:green;display:none;">Faena creada correctamente.</p>
+              <button type="submit">Crear Faena</button>
+            </form>
+          </div>
 
-    <!-- EDITAR FAENA -->
-    <form id="form-editar-faena" class="stack" style="display:none;">
-      <h4>Editar Faena</h4>
-      <label>Nombre
-        <input class="input" name="descripcion" required />
-      </label>
-      <label>Fecha
-        <input class="input" name="fecha" type="date" required />
-      </label>
-      <label>Tipo
-        <select class="input" name="tipo">
-          <option value="general">General</option>
-          <option value="agua">Agua</option>
-        </select>
-      </label>
-      <label>Estado
-        <select class="input" name="estado">
-          <option value="activa">Activa</option>
-          <option value="cerrada">Cerrada</option>
-        </select>
-      </label>
-      <p id="editar-faena-error" style="color:red;display:none;">Error al editar.</p>
-      <p id="editar-faena-success" style="color:green;display:none;">Faena actualizada.</p>
-      <button type="submit">Guardar cambios</button>
-      <button type="button" id="btn-cancelar-editar">Cancelar</button>
-    </form>
-  </div>
+          <div id="gestionar-faenas" style="display:none;">
+            <h3>Faenas</h3>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <button id="filtro-todas" class="btn-filtro activo">Todas</button>
+              <button id="filtro-activas" class="btn-filtro">Activas</button>
+              <button id="filtro-cerradas" class="btn-filtro">Cerradas</button>
+            </div>
+            <div id="lista-faenas"></div>
+            <form id="form-editar-faena" class="stack" style="display:none;">
+              <h4>Editar Faena</h4>
+              <label>Nombre <input class="input" name="descripcion" required /></label>
+              <label>Fecha <input class="input" name="fecha" type="date" required /></label>
+              <label>Tipo
+                <select class="input" name="tipo">
+                  <option value="general">General</option>
+                  <option value="agua">Agua</option>
+                </select>
+              </label>
+              <label>Estado
+                <select class="input" name="estado">
+                  <option value="activa">Activa</option>
+                  <option value="cerrada">Cerrada</option>
+                </select>
+              </label>
+              <p id="editar-faena-error" style="color:red;display:none;">Error al editar.</p>
+              <p id="editar-faena-success" style="color:green;display:none;">Faena actualizada.</p>
+              <button type="submit">Guardar cambios</button>
+              <button type="button" id="btn-cancelar-editar">Cancelar</button>
+            </form>
+          </div>
+        </section>
 
-</section>
-
-        <!-- SECCIÓN COLONOS -->
         <section id="seccion-colonos" style="display:none;">
           <h3>Gestión de Colonos</h3>
-
           <label>Opciones</label>
           <select class="input" id="opciones-colonos">
             <option value="">Selecciona una opción</option>
@@ -109,24 +99,15 @@ export function renderAdminCrud() {
             <option value="buscar">Buscar / Editar / Eliminar</option>
           </select>
 
-          <!-- CREAR COLONO -->
           <div id="crear-colono" style="display:none;">
             <form id="form-crear-colono" class="stack">
-              <label>Nombre
-                <input class="input" name="nombre" required />
+              <label>Nombre <input class="input" name="nombre" required /></label>
+              <label>Apellido Paterno <input class="input" name="ap_paterno" required /></label>
+              <label>Apellido Materno <input class="input" name="ap_materno" required /></label>
+              <label>Año de Nacimiento
+                <input class="input" name="anio_nacimiento" type="number" placeholder="1990" min="1920" max="2010" required />
               </label>
-              <label>Apellido Paterno
-                <input class="input" name="ap_paterno" required />
-              </label>
-              <label>Apellido Materno
-                <input class="input" name="ap_materno" required />
-              </label>
-              <label>Edad
-                <input class="input" name="edad" type="number" required />
-              </label>
-              <label>Teléfono
-                <input class="input" name="telefono" />
-              </label>
+              <label>Teléfono <input class="input" name="telefono" /></label>
               <label>Cuadrilla
                 <select class="input" name="cuadrilla_id" id="select-cuadrilla-crear">
                   <option value="">Sin cuadrilla</option>
@@ -136,58 +117,35 @@ export function renderAdminCrud() {
                 <input type="checkbox" name="exento" />
                 Exento (edad avanzada, vive solo)
               </label>
-              <label>
-                <input type="checkbox" id="check-acceso-crear" />
-                Dar acceso al sistema
-              </label>
-              <div id="acceso-crear" style="display:none;">
-                <label>Username
-                  <input class="input" name="username" />
-                </label>
-                <label>Password
-                  <input class="input" name="password" type="password" />
-                </label>
-              </div>
               <p id="crear-error" style="color:red;display:none;">Error al registrar colono.</p>
-              <p id="crear-success" style="color:green;display:none;">Colono registrado correctamente.</p>
+              <p id="crear-success" style="color:green;display:none;">
+                Colono registrado. <span id="credenciales-generadas"></span>
+              </p>
               <button type="submit">Registrar</button>
             </form>
           </div>
 
-          <!-- BUSCAR / EDITAR / ELIMINAR -->
           <div id="buscar-colono" style="display:none;">
             <div style="display:flex;gap:8px;margin-top:12px;">
               <input class="input" id="input-buscar" placeholder="Nombre o apellido" style="flex:1" />
               <button id="btn-buscar">Buscar</button>
             </div>
             <div id="resultados-busqueda"></div>
-
             <form id="form-editar-colono" class="stack" style="display:none;">
               <h4>Editar Colono</h4>
-              <label>Nombre
-                <input class="input" name="nombre" required />
+              <label>Nombre <input class="input" name="nombre" required /></label>
+              <label>Apellido Paterno <input class="input" name="ap_paterno" required /></label>
+              <label>Apellido Materno <input class="input" name="ap_materno" required /></label>
+              <label>Año de Nacimiento
+                <input class="input" name="anio_nacimiento" type="number" placeholder="1990" min="1920" max="2010" required />
               </label>
-              <label>Apellido Paterno
-                <input class="input" name="ap_paterno" required />
-              </label>
-              <label>Apellido Materno
-                <input class="input" name="ap_materno" required />
-              </label>
-              <label>Edad
-                <input class="input" name="edad" type="number" required />
-              </label>
-              <label>Teléfono
-                <input class="input" name="telefono" />
-              </label>
+              <label>Teléfono <input class="input" name="telefono" /></label>
               <label>Cuadrilla
                 <select class="input" name="cuadrilla_id" id="select-cuadrilla-editar">
                   <option value="">Sin cuadrilla</option>
                 </select>
               </label>
-              <label>
-                <input type="checkbox" name="exento" />
-                Exento
-              </label>
+              <label><input type="checkbox" name="exento" /> Exento</label>
               <p id="editar-error" style="color:red;display:none;">Error al editar colono.</p>
               <p id="editar-success" style="color:green;display:none;">Colono actualizado correctamente.</p>
               <div style="display:flex;gap:8px;">
@@ -202,7 +160,6 @@ export function renderAdminCrud() {
     `,
 
     async onMount(root) {
-      // carga cuadrillas en todos los selects
       const { data: cuadrillas } = await supabase
         .from("cuadrillas")
         .select("*");
@@ -228,6 +185,15 @@ export function renderAdminCrud() {
           e.target.value === "faenas" ? "block" : "none";
         root.querySelector("#seccion-colonos").style.display =
           e.target.value === "colonos" ? "block" : "none";
+        root.querySelector("#seccion-asistencia").style.display =
+          e.target.value === "asistencia" ? "block" : "none";
+
+        if (e.target.value === "asistencia") {
+          const seccion = root.querySelector("#seccion-asistencia");
+          const { html, onMount } = renderAdminAsistencia();
+          seccion.innerHTML = html;
+          onMount?.(seccion);
+        }
       });
 
       // ---- FAENAS ----
@@ -262,9 +228,7 @@ export function renderAdminCrud() {
         root.querySelector("#faena-error").style.display = "none";
         root.querySelector("#faena-success").style.display = "none";
 
-        // DESPUÉS
         const usuario = JSON.parse(sessionStorage.getItem("sesion"));
-
         const { data, error } = await supabase
           .from("faenas")
           .insert({
@@ -289,7 +253,6 @@ export function renderAdminCrud() {
             faena_id: data.id,
             cuadrilla_id: parseInt(op.value),
           }));
-
           if (cuadrillasSeleccionadas.length > 0) {
             await supabase
               .from("faena_cuadrilla")
@@ -302,7 +265,6 @@ export function renderAdminCrud() {
         tipoFaena.dispatchEvent(new Event("change"));
       });
 
-      // OPCIONES FAENAS
       root.querySelector("#opciones-faenas").addEventListener("change", (e) => {
         root.querySelector("#crear-faena").style.display =
           e.target.value === "crear" ? "block" : "none";
@@ -311,7 +273,6 @@ export function renderAdminCrud() {
         if (e.target.value === "gestionar") cargarFaenas("todas");
       });
 
-      // CARGAR FAENAS
       let faenaSeleccionada = null;
 
       async function cargarFaenas(filtro) {
@@ -333,20 +294,20 @@ export function renderAdminCrud() {
         lista.innerHTML = data
           .map(
             (f) => `
-    <div style="padding:12px;border-bottom:1px solid #334155;cursor:pointer;" data-id="${f.id}">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong>${f.descripcion}</strong>
-        <span style="font-size:11px;padding:2px 8px;border-radius:20px;
-          background:${f.estado === "activa" ? "#064e3b" : "#1e293b"};
-          color:${f.estado === "activa" ? "#10b981" : "#94a3b8"}">
-          ${f.estado}
-        </span>
-      </div>
-      <div style="font-size:12px;color:#64748b;margin-top:4px;">
-        📅 ${f.fecha} · ${f.tipo} · ${f.alcance}
-      </div>
-    </div>
-  `,
+          <div style="padding:12px;border-bottom:1px solid #334155;cursor:pointer;" data-id="${f.id}">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong>${f.descripcion}</strong>
+              <span style="font-size:11px;padding:2px 8px;border-radius:20px;
+                background:${f.estado === "activa" ? "#064e3b" : "#1e293b"};
+                color:${f.estado === "activa" ? "#10b981" : "#94a3b8"}">
+                ${f.estado}
+              </span>
+            </div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;">
+              📅 ${f.fecha} · ${f.tipo} · ${f.alcance}
+            </div>
+          </div>
+        `,
           )
           .join("");
 
@@ -359,7 +320,6 @@ export function renderAdminCrud() {
               .from("asistencia")
               .select("estado")
               .eq("faena_id", faena.id);
-
             const asistieron =
               asistencia?.filter((a) => a.estado === "asistio").length || 0;
             const faltaron =
@@ -382,13 +342,10 @@ export function renderAdminCrud() {
                 "padding:10px;background:#0f172a;border-radius:8px;margin-bottom:12px;font-size:13px;";
               form.prepend(resumen);
             }
-
             resumen.innerHTML = `
-        <strong>Asistencia registrada:</strong><br>
-        ✅ Asistieron: ${asistieron} &nbsp;
-        ❌ Faltaron: ${faltaron} &nbsp;
-        🤒 Justificados: ${justificados}
-      `;
+              <strong>Asistencia registrada:</strong><br>
+              ✅ Asistieron: ${asistieron} &nbsp; ❌ Faltaron: ${faltaron} &nbsp; 🤒 Justificados: ${justificados}
+            `;
           });
         });
       }
@@ -423,7 +380,6 @@ export function renderAdminCrud() {
           root.querySelector("#editar-faena-error").style.display = "block";
           return;
         }
-
         root.querySelector("#editar-faena-success").style.display = "block";
         cargarFaenas("todas");
       });
@@ -445,14 +401,6 @@ export function renderAdminCrud() {
             e.target.value === "buscar" ? "block" : "none";
         });
 
-      root
-        .querySelector("#check-acceso-crear")
-        .addEventListener("change", (e) => {
-          root.querySelector("#acceso-crear").style.display = e.target.checked
-            ? "block"
-            : "none";
-        });
-
       // CREAR colono
       const formCrear = root.querySelector("#form-crear-colono");
       formCrear.addEventListener("submit", async (e) => {
@@ -460,23 +408,27 @@ export function renderAdminCrud() {
         root.querySelector("#crear-error").style.display = "none";
         root.querySelector("#crear-success").style.display = "none";
 
-        const tieneAcceso = root.querySelector("#check-acceso-crear").checked;
-        let passwordFinal = null;
+        const nombre = formCrear.nombre.value;
+        const apPaterno = formCrear.ap_paterno.value;
+        const apMaterno = formCrear.ap_materno.value;
+        const anio = formCrear.anio_nacimiento.value;
+        const telefono = formCrear.telefono.value;
 
-        if (tieneAcceso && formCrear.password.value) {
-          passwordFinal = await bcrypt.hash(formCrear.password.value, 10);
-        }
+        const usernameAuto =
+          `${nombre.substring(0, 2)}${apPaterno.charAt(0)}${apMaterno.charAt(0)}${telefono.slice(-1)}`.toLowerCase();
+        const passwordAuto =
+          `${nombre.charAt(0)}${apPaterno.charAt(0)}${apMaterno.charAt(0)}${anio}`.toLowerCase();
+        const passwordFinal = await bcrypt.hash(passwordAuto, 10);
 
         const { error } = await supabase.from("colonos").insert({
-          nombre: formCrear.nombre.value,
-          ap_paterno: formCrear.ap_paterno.value,
-          ap_materno: formCrear.ap_materno.value,
-          edad: parseInt(formCrear.edad.value),
-          telefono: formCrear.telefono.value,
+          nombre,
+          ap_paterno: apPaterno,
+          ap_materno: apMaterno,
+          anio_nacimiento: parseInt(anio),
+          telefono,
           cuadrilla_id: formCrear.cuadrilla_id.value || null,
           exento: formCrear.exento.checked,
-          tiene_acceso: tieneAcceso,
-          username: tieneAcceso ? formCrear.username.value : null,
+          username: usernameAuto,
           password: passwordFinal,
         });
 
@@ -486,9 +438,10 @@ export function renderAdminCrud() {
           return;
         }
 
+        root.querySelector("#credenciales-generadas").textContent =
+          `Usuario: ${usernameAuto} / Contraseña: ${passwordAuto}`;
         root.querySelector("#crear-success").style.display = "block";
         formCrear.reset();
-        root.querySelector("#acceso-crear").style.display = "none";
       });
 
       // BUSCAR colono
@@ -528,7 +481,7 @@ export function renderAdminCrud() {
             formEditar.nombre.value = colono.nombre;
             formEditar.ap_paterno.value = colono.ap_paterno;
             formEditar.ap_materno.value = colono.ap_materno;
-            formEditar.edad.value = colono.edad;
+            formEditar.anio_nacimiento.value = colono.anio_nacimiento || "";
             formEditar.telefono.value = colono.telefono || "";
             formEditar.cuadrilla_id.value = colono.cuadrilla_id || "";
             formEditar.exento.checked = colono.exento;
@@ -551,7 +504,7 @@ export function renderAdminCrud() {
             nombre: formEditar.nombre.value,
             ap_paterno: formEditar.ap_paterno.value,
             ap_materno: formEditar.ap_materno.value,
-            edad: parseInt(formEditar.edad.value),
+            anio_nacimiento: parseInt(formEditar.anio_nacimiento.value),
             telefono: formEditar.telefono.value,
             cuadrilla_id: formEditar.cuadrilla_id.value || null,
             exento: formEditar.exento.checked,
@@ -562,7 +515,6 @@ export function renderAdminCrud() {
           root.querySelector("#editar-error").style.display = "block";
           return;
         }
-
         root.querySelector("#editar-success").style.display = "block";
       });
 

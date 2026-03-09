@@ -29,12 +29,13 @@ export function renderLoginScreen() {
         const username = root.querySelector("#username").value.trim();
         const password = root.querySelector("#password").value;
 
-        // primero busca en usuarios (encargados/tesorero)
-        const { data: usuario } = await supabase
+        // busca en usuarios
+        const { data: usuarios } = await supabase
           .from("usuarios")
           .select("*")
-          .eq("username", username)
-          .single();
+          .eq("username", username);
+
+        const usuario = usuarios?.[0];
 
         if (usuario) {
           const coincide = await bcrypt.compare(password, usuario.password);
@@ -50,12 +51,13 @@ export function renderLoginScreen() {
           return;
         }
 
-        // si no es encargado busca en colonos por teléfono
-        const { data: colono } = await supabase
+        // busca en colonos por teléfono
+        const { data: colonos } = await supabase
           .from("colonos")
           .select("*")
-          .eq("telefono", username)
-          .single();
+          .or(`telefono.eq.${username},username.eq.${username}`);
+
+        const colono = colonos?.[0];
 
         if (!colono || !colono.password) {
           root.querySelector("#login-error").style.display = "block";
