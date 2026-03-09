@@ -262,7 +262,8 @@ export function renderAdminCrud() {
         root.querySelector("#faena-error").style.display = "none";
         root.querySelector("#faena-success").style.display = "none";
 
-        const usuario = JSON.parse(sessionStorage.getItem("usuario"));
+        // DESPUÉS
+        const usuario = JSON.parse(sessionStorage.getItem("sesion"));
 
         const { data, error } = await supabase
           .from("faenas")

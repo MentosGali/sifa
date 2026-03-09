@@ -7,8 +7,9 @@ import { supabase } from "../config/supabase.js";
 const { data, error } = await supabase.from("colonos").select("*");
 console.log("conexion:", data, error);
 
+// DESPUÉS
 function estaAutenticado() {
-  return sessionStorage.getItem("usuario") !== null;
+  return sessionStorage.getItem("sesion") !== null;
 }
 
 export function mountApp(rootElement) {
